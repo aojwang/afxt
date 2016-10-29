@@ -116,5 +116,5 @@ def refresh_all_stock():
 
 
 if __name__ == "__main__":
-    delete_stock_data()
+    # delete_stock_data()
     refresh_all_stock()
