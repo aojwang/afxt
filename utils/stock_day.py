@@ -60,6 +60,17 @@ def refresh_stock_list():
     runner.dispose()
 
 
+@est_perf
+def refresh_stock_concept():
+    engine = get_pg_engine()
+    code_df = ts.get_concept_classified()
+    code_df.to_sql(constants.STOCK_CONCEPT, engine, if_exists='replace')
+    engine.dispose()
+    runner = SqlRunner()
+    runner.execute("CREATE INDEX on %s(code)" % constants.STOCK_CONCEPT)
+    runner.dispose()
+
+
 def stock_latest_day(runner):
     sql = """
         SELECT max(date)
@@ -67,6 +78,22 @@ def stock_latest_day(runner):
         WHERE code = 'sh'
         """ % constants.STOCK_DAILY
     rows, _ = runner.select(sql)
+    return rows[0][0]
+
+
+def stock_open_day(runner, end_day, interval):
+    sql = """
+        SELECT min(date)
+        FROM (
+            SELECT date
+            FROM {name}
+            WHERE code = 'sh' and date <= %(end_day)s
+            ORDER BY date DESC
+            LIMIT %(interval)s
+        ) t
+        """.format(name=constants.STOCK_DAILY)
+    params = {'interval': interval, 'end_day': end_day}
+    rows, _ = runner.select(sql, params)
     return rows[0][0]
 
 

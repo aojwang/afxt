@@ -8,7 +8,8 @@ import tushare as ts
 from da import dbutil
 from da.dbutil import SqlRunner
 from utils.decorator import est_perf
-from utils.stock_day import refresh_stock_list, get_all_stock_codes, get_start_day, delete_stock_data
+from utils.stock_day import refresh_stock_list, get_all_stock_codes, get_start_day, delete_stock_data, \
+    refresh_stock_concept
 
 
 class StockDaily(object):
@@ -37,6 +38,8 @@ class StockDaily(object):
                  v_ma20 double precision,
                  turnover double precision
                )
+               CREATE INDEX ON stock_daily (code);
+               CREATE INDEX ON stock_daily (date);
             """)
 
     def create_stock_index_table(self):
@@ -109,7 +112,8 @@ def refresh_stock_index():
 
 
 def refresh_all_stock():
-    refresh_stock_list()
+    # refresh_stock_concept()
+    # refresh_stock_list()
     p = Pool(processes=16)
     code_list = get_all_stock_codes()
     p.map(refresh_stock_daily, sorted(code_list))

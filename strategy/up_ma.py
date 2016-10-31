@@ -65,6 +65,6 @@ class UpMA(object):
 
 
 if __name__ == "__main__":
-    # insert_more_ma_stock_daily()
+    insert_more_ma_stock_daily()
     uta = UpMA()
     uta.recommend()
