@@ -38,12 +38,13 @@ class UpMA(object):
                            having count(*) >= %(up_days)s
                            order by code
                            ) t
-                           WHERE t.pos >= %(volume_increase)s * t.cons AND
+                           WHERE t.min_close > 0 AND t.pos >= %(volume_increase)s * t.cons AND
                                  (t.max_close - t.min_close) / t.min_close >= 0.04
                        ) s,
                        {stock_daily_more} t
                        WHERE s.code = t.code AND
                              t.date = %(end_day)s AND
+                             t.open > 0 AND
                              t.close >= ma5 AND t.close >= ma10 AND t.close >= ma20 AND
                              t.close >= ma30 AND t.close >= ma60 AND t.close >= s.max_close AND
                              t.p_change <= 5.0 AND (t.high - t.close) / t.open <= 0.01

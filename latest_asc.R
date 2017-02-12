@@ -18,7 +18,7 @@ print (parser$get_args()$date)
 
 cur_path = '/Users/grant/workspace/afxt'
 cur_date = Sys.Date()
-cur_type = 'callback'
+cur_type = 'latest_asc'
 
 new_path = paste(cur_path, 'chart', sep='/')
 if (!dir.exists(new_path)){
@@ -47,8 +47,8 @@ pw <- {
 drv <- dbDriver("PostgreSQL")
 # creates a connection to the postgres database
 # note that "con" will be used later in each connection to the database
-con <- dbConnect(drv, dbname = "fs",
-                 host = "nile", port = 5432,
+con <- dbConnect(drv, dbname = "stock",
+                 host = "localhost", port = 5432,
                  user = "aa", password = pw)
 rm(pw) # removes the password
 
@@ -84,14 +84,14 @@ for (code in code_dfs$code)
   rownames(dfs) = dfs$date
   mtx = data.matrix(dfs)
   mtx.XKP = as.xts(mtx)
-  candleChart(mtx.XKP, up.col='red', dn.col='green',
+  candleChart(mtx.XKP, up.col='red', dn.col='green', 
               name=paste(code, "MA5(blue), MA10(red), MA20(green), MA30(orange)", sep="-"), theme=chartTheme('white'))
-  addBBands()
-  addRSI()
+
   addSMA(5, col='blue')
   addSMA(10, col='red')
   addSMA(20, col='green')
   addSMA(30, col='orange')
   dev.copy(pdf, paste(code_name, "pdf", sep="."), width=16, height=9)
   dev.off()
+  dev.flush()
 }

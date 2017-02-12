@@ -86,7 +86,7 @@ for (code in code_dfs$code)
   mtx.XKP = as.xts(mtx)
   candleChart(mtx.XKP, up.col='red', dn.col='green', 
               name=paste(code, "MA5(blue), MA10(red), MA20(green), MA30(orange)", sep="-"), theme=chartTheme('white'))
-  addMACD(col='red')
+
   addSMA(5, col='blue')
   addSMA(10, col='red')
   addSMA(20, col='green')

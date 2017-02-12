@@ -45,7 +45,7 @@ class CallbackAnalysis(object):
                       ) t
                 WHERE (close_list[1] - close_list[2] + 0.0) / close_list[2] <=  %(trend_percent)s
             )
-            SELECT DISTINCT m.code, i.name, i.industry, i.esp, i.pe, p.percent,
+            SELECT DISTINCT m.code, i.name, i.industry, i.esp::FLOAT8, i.pe, p.percent,
                    now()::DATE as update_time, '{reason}' as reason
             FROM {stock_peak} m, {stock_min_max} d, {stock_info} i, stock_percent p, {stock_max} h,
               {stock_daily} e

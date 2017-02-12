@@ -18,5 +18,6 @@ PEAK_LEFT_INTERVAL = 10
 PEAK_RIGHT_INTERVAL = 10
 STOCK_RECOMMEND = 'stock_recommend'
 STOCK_TICK_DATA = 'stock_tick_data'
+STOCK_TICK_HIST_DATA = 'stock_tick_hist_data'
 INDEX_NAMES = ['sh', 'sz', 'hs300', 'sz50', 'zxb', 'cyb']
 STOCK_DAILY_MORE_MA = 'stock_daily_more'

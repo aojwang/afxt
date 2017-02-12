@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2016 Grant AO. All rights reserved.
+import datetime
+
 from da.dbutil import create_table, SqlRunner
 from utils import constants
 from utils.constants import STOCK_DAILY_MORE_MA, STOCK_DAILY, STOCK_DAYS
@@ -159,13 +161,13 @@ def refresh_more_ma_stock_daily():
 
 def _get_latest_day(name):
     runner = SqlRunner()
-    rows, _ = runner.select("""
+    rows, cnt = runner.select("""
         SELECT max(date)
         FROM {name}
         WHERE code = 'sh'
     """.format(name=name))
     runner.dispose()
-    return rows[0][0]
+    return rows[0][0] if rows[0][0] else datetime.date(1900, 1, 1)
 
 
 @est_perf
@@ -181,13 +183,19 @@ def insert_more_ma_stock_daily():
         SELECT *
         FROM (
         SELECT *, avg(close) OVER ma30_win as ma30,
-          avg(close) OVER ma60_win as ma60
+          avg(close) OVER ma60_win as ma60,
+          avg(close) OVER ma120_win as ma120,
+          avg(close) OVER ma250_win as ma250
         FROM {stock_daily}
         WHERE date >= %(more_latest)s - 100
         WINDOW ma30_win AS (partition by code ORDER BY date
         ROWS 29 PRECEDING),
         ma60_win AS (partition by code ORDER BY date
-        ROWS 59 PRECEDING)
+        ROWS 59 PRECEDING),
+        ma120_win AS (partition by code ORDER BY date
+        ROWS 119 PRECEDING),
+        ma250_win AS (partition by code ORDER BY date
+        ROWS 249 PRECEDING)
         ) t
         WHERE date > %(more_latest)s
     """.format(name=STOCK_DAILY_MORE_MA, stock_daily=STOCK_DAILY)

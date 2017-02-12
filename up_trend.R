@@ -47,8 +47,8 @@ pw <- {
 drv <- dbDriver("PostgreSQL")
 # creates a connection to the postgres database
 # note that "con" will be used later in each connection to the database
-con <- dbConnect(drv, dbname = "stock",
-                 host = "localhost", port = 5432,
+con <- dbConnect(drv, dbname = "fs",
+                 host = "nile", port = 5432,
                  user = "aa", password = pw)
 rm(pw) # removes the password
 
