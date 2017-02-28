@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 import os
 
 def get_pg_engine():
-    return create_engine('postgresql+psycopg2://aa:@127.0.0.1/stock',  encoding='utf8')
+    return create_engine('postgresql+psycopg2://hulk_gen:q1w2e3r4@nile/fs',  encoding='utf8')
 
 
 class SqlRunner(object):
