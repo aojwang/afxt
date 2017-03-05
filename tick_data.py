@@ -112,7 +112,7 @@ def convert_tick_to_daily():
           v_ma5, v_ma10, v_ma20, turnover)
         SELECT s.code, s.date, s.open, s.high, s.low, s.price, s.volume / 100,
           s.price - s.pre_close,
-          (s.price - s.pre_close) / s.pre_close,
+          ((s.price - s.pre_close) / s.pre_close) * 100,
           (t.ma5 + (s.price - t.price5) / 5),
           (t.ma10 + (s.price - t.price10) / 10),
           (t.ma20 + (s.price - t.price20) / 20),
