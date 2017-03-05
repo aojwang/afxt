@@ -15,18 +15,26 @@ def send_up_trend_email():
     stmt = '''
         SELECT name, code
         FROM stock_recommend
-        WHERE date = now()::DATE AND reason = 'up_trend'
+        WHERE update_time = now()::DATE AND reason = 'up_trend'
     '''
-    return execute_stmt(stmt)
+    result = execute_stmt(stmt)
+    print 'up_trend'
+    print result
+    return result
+
 
 @SendEmail('callback')
 def send_callback_email():
     stmt = '''
         SELECT name, code
         FROM stock_recommend
-        WHERE date = now()::DATE AND reason = 'callback'
+        WHERE update_time = now()::DATE AND reason = 'callback'
     '''
-    return execute_stmt(stmt)
+    result = execute_stmt(stmt)
+    print 'callback'
+    print result
+    return result
+
 
 @SendEmail('continuous increase')
 def send_cont_increase_email():
@@ -36,10 +44,16 @@ def send_cont_increase_email():
         WHERE update_date = now()::DATE
         ORDER BY n_days DESC
     '''
-    return execute_stmt(stmt)
-
+    result = execute_stmt(stmt)
+    print 'cont_increase'
+    print result
+    return result
 
 if __name__ == '__main__':
+    import sys
+    reload(sys)  # Reload does the trick!
+    sys.setdefaultencoding('UTF8')
+
     send_up_trend_email()
     send_callback_email()
     send_cont_increase_email()

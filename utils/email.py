@@ -24,8 +24,8 @@ class SendEmail(object):
     def _send_email(subject, message):
         send_mail(subject,
                   message,
-                  'aojw@appannie.com',
-                  'grant@appannie.com'
+                  'hulk@appannie.org',
+                  ['grant@appannie.com']
                   )
 
     def _get_xueqiu_site(self, code):
@@ -37,7 +37,7 @@ class SendEmail(object):
         result = []
         for name, code, in stock_name_codes:
             result.append(' : '.join([name, self._get_xueqiu_site(code)]))
-        return '\n'.join([self._type] + result)
+        return '\n'.join(result)
 
     def __call__(self, original_func):
         @functools.wraps(original_func)
@@ -51,6 +51,7 @@ class SendEmail(object):
                 message = str(e)
                 subject = 'daily update (F)'
             finally:
+                print subject, message
                 self._send_email(subject, message)
 
         return decorated
