@@ -2,7 +2,7 @@
 
 # Copyright (c) 2016 Grant AO. All rights reserved.
 import functools
-
+import datetime
 import django.core.mail
 
 
@@ -46,10 +46,10 @@ class SendEmail(object):
             try:
                 stock_name_codes = original_func(*args, **kwargs)
                 message = self._gen_body(stock_name_codes)
-                subject = 'daily update (S)'
+                subject = 'daily update (S)' + str(datetime.date.today())
             except Exception as e:
                 message = str(e)
-                subject = 'daily update (F)'
+                subject = 'daily update (F)' + str(datetime.date.today())
             finally:
                 print subject, message
                 self._send_email(subject, message)
