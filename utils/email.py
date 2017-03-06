@@ -6,6 +6,26 @@ import datetime
 import django.core.mail
 
 
+CONT_INCREASE_HEADER = u'''
+连续上涨买入（{date}）
+
+连续上涨天数大于等于3天的股票（1％～5%），越靠前的股票出现次数越多！股票有可能重复出现，比如最近3次和4次都上涨！
+'''
+
+
+CALLBACK_HEADER = u'''
+突破趋势回调买入（{date})
+
+突破趋势回调买入：以上证指数为参考，自股灾以来最低点（2638）开始计算波段，期间有若干个顶，突破这些顶为突破趋势，然后回调，且回调幅度小于15%，并且最新收盘价在ma5/10之上。从2015-11-09到2016-01-27得到前期高点，选择那些突破趋势，离前期高点至少有20%的上涨空间，得到以下股票:
+'''
+
+
+UP_TREND_HEADER = u'''
+突破趋势买入（{date})
+
+突破趋势买入：以上证指数为参考，自股灾以来最低点（2638）开始计算波段，期间有若干个顶，突破这些顶（最新收盘价高于这些顶）为突破趋势，并且超越上次高点涨幅小于10%。从2015-11-09到2016-01-27得到前期高点，选择那些突破趋势，并且离前期高点至少有20%的上涨空间。得到以下股票:
+'''
+
 def send_mail(subject, message, from_email, recipient_list,
               fail_silently=False, auth_user=None, auth_password=None,
               connection=None):
@@ -19,6 +39,11 @@ def send_mail(subject, message, from_email, recipient_list,
 class SendEmail(object):
     def __init__(self, _type):
         self._type = type
+        self.header = {
+            'callback': CALLBACK_HEADER,
+            'up_trend': UP_TREND_HEADER,
+            'increase': CONT_INCREASE_HEADER,
+        }.get(self._type)
 
     @staticmethod
     def _send_email(subject, message):
@@ -34,7 +59,7 @@ class SendEmail(object):
         return 'https://xueqiu.com/S/SZ' + code
 
     def _gen_body(self, stock_name_codes):
-        result = []
+        result = [self.header.format(date=str(datetime.date.now()))]
         for name, code, in stock_name_codes:
             result.append(' : '.join([name, self._get_xueqiu_site(code)]))
         return '\n'.join(result)

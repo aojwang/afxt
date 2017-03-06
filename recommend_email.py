@@ -10,7 +10,7 @@ def execute_stmt(stmt):
     rows, _ = runner.select(stmt)
     return rows
 
-@SendEmail('up trend')
+@SendEmail('up_trend')
 def send_up_trend_email():
     stmt = '''
         SELECT name, code
@@ -36,7 +36,7 @@ def send_callback_email():
     return result
 
 
-@SendEmail('continuous increase')
+@SendEmail('increase')
 def send_cont_increase_email():
     stmt = '''
         SELECT name, code
