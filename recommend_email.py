@@ -42,7 +42,8 @@ def send_cont_increase_email():
         SELECT name, code
         FROM continuous_increase
         WHERE update_date = now()::DATE
-        ORDER BY n_days DESC
+        GROUP BY name, code
+        ORDER BY max(n_days) DESC
     '''
     result = execute_stmt(stmt)
     print 'cont_increase'

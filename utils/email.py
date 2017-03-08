@@ -38,7 +38,7 @@ def send_mail(subject, message, from_email, recipient_list,
 
 class SendEmail(object):
     def __init__(self, _type):
-        self._type = type
+        self._type = _type
         self.header = {
             'callback': CALLBACK_HEADER,
             'up_trend': UP_TREND_HEADER,
@@ -53,15 +53,24 @@ class SendEmail(object):
                   ['grant@appannie.com']
                   )
 
-    def _get_xueqiu_site(self, code):
+    def _get_code_trade(self, code):
         if code.startswith('6'):
-            return 'https://xueqiu.com/S/SH' + code
-        return 'https://xueqiu.com/S/SZ' + code
+            return 'SH'
+        return 'SZ'
+
+    def _get_xueqiu_site(self, code):
+        return ''.join(['https://xueqiu.com/S/', self._get_code_trade(code), code])
 
     def _gen_body(self, stock_name_codes):
-        result = [self.header.format(date=str(datetime.date.now()))]
+        result = [self.header.format(date=str(datetime.date.today()))]
+        i = 0
         for name, code, in stock_name_codes:
-            result.append(' : '.join([name, self._get_xueqiu_site(code)]))
+            if i < 3:
+                result.append(''.join(['$', name, '(', self._get_code_trade(code), code, ')$']))
+                i += 1
+            else:
+                result.append(' : '.join([name, self._get_xueqiu_site(code)]))
+            
         return '\n'.join(result)
 
     def __call__(self, original_func):
