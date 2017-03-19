@@ -53,6 +53,7 @@ class ContinuousIncrease(object):
 if __name__ == '__main__':
     ci = ContinuousIncrease()
     ci.create_table()
+    ci.get_top_n(2)
     ci.get_top_n(3)
     ci.get_top_n(4)
     ci.get_top_n(5)

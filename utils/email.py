@@ -64,12 +64,13 @@ class SendEmail(object):
     def _gen_body(self, stock_name_codes):
         result = [self.header.format(date=str(datetime.date.today()))]
         i = 0
-        for name, code, in stock_name_codes:
+        for industry, name, code, p_change, in stock_name_codes:
+            print industry, name, code, p_change,
             if i < 3:
-                result.append(''.join(['$', name, '(', self._get_code_trade(code), code, ')$']))
+                result.append(''.join(['[', industry, ']', '[', p_change, ']:', '$', name, '(', self._get_code_trade(code), code, ')$']))
                 i += 1
             else:
-                result.append(' : '.join([name, self._get_xueqiu_site(code)]))
+                result.append(''.join(['[', industry, ']', '[', p_change, ']:', '\t', ' : '.join([name, self._get_xueqiu_site(code)])]))
             
         return '\n'.join(result)
 

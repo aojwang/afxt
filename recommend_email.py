@@ -13,7 +13,7 @@ def execute_stmt(stmt):
 @SendEmail('up_trend')
 def send_up_trend_email():
     stmt = '''
-        SELECT name, code
+        SELECT industry, name, code, round(percent::numeric, 2)::TEXT || '%%'
         FROM stock_recommend
         WHERE update_time = now()::DATE AND reason = 'up_trend'
     '''
@@ -26,7 +26,7 @@ def send_up_trend_email():
 @SendEmail('callback')
 def send_callback_email():
     stmt = '''
-        SELECT name, code
+        SELECT industry, name, code, round(percent::numeric, 2)::TEXT || '%%'
         FROM stock_recommend
         WHERE update_time = now()::DATE AND reason = 'callback'
     '''
@@ -39,11 +39,11 @@ def send_callback_email():
 @SendEmail('increase')
 def send_cont_increase_email():
     stmt = '''
-        SELECT name, code
+        SELECT industry, name, code, array_to_string(p_change, '%%,') || '%%'
         FROM continuous_increase
         WHERE update_date = now()::DATE
-        GROUP BY name, code
-        ORDER BY max(n_days) DESC
+        ORDER BY n_days DESC
+        LIMIT 15
     '''
     result = execute_stmt(stmt)
     print 'cont_increase'
