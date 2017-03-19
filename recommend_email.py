@@ -19,7 +19,6 @@ def send_up_trend_email():
     '''
     result = execute_stmt(stmt)
     print 'up_trend'
-    print result
     return result
 
 
@@ -32,7 +31,6 @@ def send_callback_email():
     '''
     result = execute_stmt(stmt)
     print 'callback'
-    print result
     return result
 
 
@@ -43,11 +41,9 @@ def send_cont_increase_email():
         FROM continuous_increase
         WHERE update_date = now()::DATE
         ORDER BY n_days DESC
-        LIMIT 15
     '''
     result = execute_stmt(stmt)
     print 'cont_increase'
-    print result
     return result
 
 if __name__ == '__main__':

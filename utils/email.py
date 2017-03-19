@@ -49,8 +49,8 @@ class SendEmail(object):
     def _send_email(subject, message):
         send_mail(subject,
                   message,
-                  'hulk@appannie.org',
-                  ['grant@appannie.com']
+                  'hi@nile.org',
+                  ['aojw2008@gmail.com']
                   )
 
     def _get_code_trade(self, code):
@@ -65,12 +65,10 @@ class SendEmail(object):
         result = [self.header.format(date=str(datetime.date.today()))]
         i = 0
         for industry, name, code, p_change, in stock_name_codes:
-            print industry, name, code, p_change,
             if i < 3:
                 result.append(''.join(['[', industry, ']', '[', p_change, ']:', '$', name, '(', self._get_code_trade(code), code, ')$']))
                 i += 1
-            else:
-                result.append(''.join(['[', industry, ']', '[', p_change, ']:', '\t', ' : '.join([name, self._get_xueqiu_site(code)])]))
+            result.append(''.join(['[', industry, ']', '[', p_change, ']:', '\t', ' : '.join([name, self._get_xueqiu_site(code)])]))
             
         return '\n'.join(result)
 
@@ -86,7 +84,6 @@ class SendEmail(object):
                 message = str(e)
                 subject = 'daily update (F)' + str(datetime.date.today())
             finally:
-                print subject, message
                 self._send_email(subject, message)
 
         return decorated
