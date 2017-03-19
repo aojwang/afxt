@@ -36,23 +36,27 @@ class ContinuousIncrease(object):
             array_agg(p_change order by date), %(n_days)s
             FROM stock_daily s, stock_info t
             WHERE s.code = t.code AND
-                  s.p_change between 1.0 and 5.0 AND
-                  s.date >= %(n_days_ago)s
+                  s.p_change between -3.0 and 5.0 AND
+                  s.date >= %(n_plus_one_days_ago)s
             group by t.name, s.code, t.industry
-            having count(*) >= %(n_days)s
+            having sum((s.p_change >= 1.0)::INT) >= %(n_days)s AND
+                   (ARRAY_AGG(s.p_change ORDER BY s.date ASC))[1]BETWEEN -3.0 AND 0 AND
+                   (ARRAY_AGG(s.p_change ORDER BY s.date DESC))[1] > 0.0
         '''
         latest_day = stock_day.stock_latest_day(self.runner)
         params = {
             'n_days': n_days,
             'n_days_ago': stock_day.stock_open_day(self.runner, latest_day, n_days),
-            'n_days': n_days
+            'n_days': n_days,
+            'n_plus_one_days_ago': stock_day.stock_open_day(self.runner, latest_day, n_days + 1)
         }
         print stmt, params
         self.runner.execute(stmt, params)
 
 if __name__ == '__main__':
     ci = ContinuousIncrease()
-    ci.create_table()
+    # ci.create_table()
+    ci.get_top_n(2)
     ci.get_top_n(3)
     ci.get_top_n(4)
     ci.get_top_n(5)

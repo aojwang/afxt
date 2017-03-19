@@ -49,8 +49,8 @@ class SendEmail(object):
     def _send_email(subject, message):
         send_mail(subject,
                   message,
-                  'hulk@appannie.org',
-                  ['grant@appannie.com']
+                  'daily_update@gmail.org',
+                  ['aojw2008@gmail.com']
                   )
 
     def _get_code_trade(self, code):
