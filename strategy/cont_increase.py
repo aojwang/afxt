@@ -33,11 +33,14 @@ class ContinuousIncrease(object):
           DELETE FROM continuous_increase WHERE update_date = NOW()::DATE AND n_days = %(n_days)s;
           INSERT INTO continuous_increase (industry, code, name, p_change, n_days)
           SELECT t.industry, s.code, t.name,
-            array_agg(p_change order by date), %(n_days)s
-            FROM stock_daily s, stock_info t
+            array_agg(s.p_change order by s.date), %(n_days)s
+            FROM stock_daily s, stock_info t, stock_daily sd
             WHERE s.code = t.code AND
                   s.p_change between -3.0 and 5.0 AND
-                  s.date >= %(n_plus_one_days_ago)s
+                  s.date >= %(n_plus_one_days_ago)s AND
+                  sd.code = s.code AND sd.date = %(latest_day)s AND
+                  (sd.high - sd.close) / sd.close <= 0.02 AND
+                  sd.close > sd.open AND sd.low <= (sd.close - sd.price_change)
             group by t.name, s.code, t.industry
             having sum((s.p_change >= 1.0)::INT) >= %(n_days)s AND
                    (ARRAY_AGG(s.p_change ORDER BY s.date ASC))[1]BETWEEN -3.0 AND 0 AND
@@ -45,6 +48,7 @@ class ContinuousIncrease(object):
         '''
         latest_day = stock_day.stock_latest_day(self.runner)
         params = {
+            'latest_day': latest_day,
             'n_days': n_days,
             'n_days_ago': stock_day.stock_open_day(self.runner, latest_day, n_days),
             'n_days': n_days,
