@@ -93,7 +93,7 @@ class UpAllMAs(object):
             ) s,
             stock_info i,
             stock_daily_more t
-            where s.code = t.code and t.date = %(latest_date)s and s.code = i.code
+            where s.code = t.code and t.date = %(latest_date)s and s.code = i.code and
                   t.p_change between 0.1 and 5 and t.close > t.ma5 and t.close > t.ma10 and
                   t.close > t.ma20 and t.close > t.ma30 and t.close > t.ma60 and
                   t.close > t.ma120 and t.close > t.ma250;
@@ -117,7 +117,8 @@ if __name__ == '__main__':
     ci.get_top_n(4)
     ci.get_top_n(5)
     ums = UpAllMAs()
-    ums.create_table()
+    #ums.create_table()
     ums.get_top_n(2, 1)
     ums.get_top_n(2, 2)
+
 

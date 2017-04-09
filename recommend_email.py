@@ -68,3 +68,4 @@ if __name__ == '__main__':
     send_up_trend_email()
     send_callback_email()
     send_cont_increase_email()
+    send_upallmas_email()

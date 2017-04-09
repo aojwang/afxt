@@ -13,6 +13,13 @@ CONT_INCREASE_HEADER = u'''
 '''
 
 
+UP_ALL_MAS_HEADER = u'''
+突破所有均线买入（{date}）
+
+最近4天运行过程中，有两天处于回调，当日处于上升并且在所有均线之上（ma5/ma10/ma20/ma30/ma60/ma120/ma250).
+'''
+
+
 CALLBACK_HEADER = u'''
 突破趋势回调买入（{date})
 
@@ -43,6 +50,7 @@ class SendEmail(object):
             'callback': CALLBACK_HEADER,
             'up_trend': UP_TREND_HEADER,
             'increase': CONT_INCREASE_HEADER,
+            'up_all_mas': UP_ALL_MAS_HEADER,
         }.get(self._type)
 
     @staticmethod
@@ -87,3 +95,4 @@ class SendEmail(object):
                 self._send_email(subject, message)
 
         return decorated
+
