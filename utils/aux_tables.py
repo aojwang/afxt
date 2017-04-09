@@ -7,6 +7,7 @@ from da.dbutil import create_table, SqlRunner
 from utils import constants
 from utils.constants import STOCK_DAILY_MORE_MA, STOCK_DAILY, STOCK_DAYS
 from utils.decorator import est_perf
+from utils.stock_day import stock_latest_day
 
 
 @est_perf
@@ -168,6 +169,14 @@ def _get_latest_day(name):
     """.format(name=name))
     runner.dispose()
     return rows[0][0] if rows[0][0] else datetime.date(1900, 1, 1)
+
+
+@est_perf
+def delete_stock_more_data():
+    runner = SqlRunner()
+    runner.execute("DELETE FROM {name} WHERE date = %(day)s".format(name=STOCK_DAILY_MORE_MA),
+                   {"day": stock_latest_day(runner)})
+    runner.dispose()
 
 
 @est_perf

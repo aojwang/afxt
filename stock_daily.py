@@ -7,6 +7,7 @@ import tushare as ts
 
 from da import dbutil
 from da.dbutil import SqlRunner
+from utils.aux_tables import delete_stock_more_data, insert_more_ma_stock_daily
 from utils.decorator import est_perf
 from utils.stock_day import refresh_stock_list, get_all_stock_codes, get_start_day, delete_stock_data, \
     refresh_stock_concept
@@ -122,3 +123,5 @@ def refresh_all_stock():
 if __name__ == "__main__":
     delete_stock_data()
     refresh_all_stock()
+    delete_stock_more_data()
+    insert_more_ma_stock_daily()
