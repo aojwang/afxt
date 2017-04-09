@@ -102,6 +102,7 @@ class UpAllMAs(object):
         params = {
             'latest_date': latest_date,
             'n_days': n_days,
+            'interval': interval,
             'start_date': stock_day.stock_open_day(self.runner, latest_date, n_days + interval)
         }
         print stmt, params

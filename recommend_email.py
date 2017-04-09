@@ -47,6 +47,19 @@ def send_cont_increase_email():
     print 'cont_increase'
     return result
 
+@SendEmail('up_all_mas')
+def send_upallmas_email():
+    stmt = '''
+        SELECT industry, name, code,round(p_change::numeric, 2)::TEXT || '%%'
+        FROM up_all_mas
+        WHERE update_date = now()::DATE
+        ORDER BY n_days DESC, interval ASC
+    '''
+    result = execute_stmt(stmt)
+    print 'up_all_mas'
+    return result
+
+
 if __name__ == '__main__':
     import sys
     reload(sys)  # Reload does the trick!
