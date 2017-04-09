@@ -50,10 +50,14 @@ def send_cont_increase_email():
 @SendEmail('up_all_mas')
 def send_upallmas_email():
     stmt = '''
-        SELECT industry, name, code,round(p_change::numeric, 2)::TEXT || '%%'
+     SELECT  industry, name, code, p_change
+     FROM (
+        SELECT n_days, industry, name, code,round(p_change::numeric, 2)::TEXT || '%%' as p_change, min(interval) as interval
         FROM up_all_mas
         WHERE update_date = now()::DATE
-        ORDER BY n_days DESC, interval ASC
+        GROUP BY  industry, name, code, p_change, n_days
+     ) t
+     ORDER BY n_days DESC, interval ASC, p_change DESC
     '''
     result = execute_stmt(stmt)
     print 'up_all_mas'
