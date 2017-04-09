@@ -79,7 +79,7 @@ class SendEmail(object):
             try:
                 stock_name_codes = original_func(*args, **kwargs)
                 message = self._gen_body(stock_name_codes)
-                subject = 'daily update (S)' + str(datetime.date.today())
+                subject = 'daily update (S)' + str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))
             except Exception as e:
                 message = str(e)
                 subject = 'daily update (F)' + str(datetime.date.today())

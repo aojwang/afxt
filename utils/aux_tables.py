@@ -227,4 +227,4 @@ def refresh_stock_days():
 
 if __name__ == "__main__":
     refresh_more_ma_stock_daily()
-    # insert_more_ma_stock_daily()
+    insert_more_ma_stock_daily()

@@ -40,9 +40,10 @@ def send_cont_increase_email():
         SELECT industry, name, code, array_to_string(p_change, '%%,') || '%%'
         FROM continuous_increase
         WHERE update_date = now()::DATE
-        ORDER BY n_days DESC
+        ORDER BY n_days DESC, p_change[array_upper(p_change, 1)] DESC
     '''
     result = execute_stmt(stmt)
+    print result
     print 'cont_increase'
     return result
 

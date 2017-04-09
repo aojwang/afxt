@@ -156,7 +156,7 @@ def convert_tick_to_daily():
 
 
 if __name__ == "__main__":
-    refresh_today_all()
+    #refresh_today_all()
     refresh_stock_tick()
     #delete_stock_data()
     convert_tick_to_daily()
