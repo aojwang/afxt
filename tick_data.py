@@ -7,6 +7,7 @@ import tushare as ts
 
 from da import dbutil
 from da.dbutil import SqlRunner, get_pg_engine
+from utils.aux_tables import delete_stock_more_data, insert_more_ma_stock_daily
 from utils.decorator import est_perf
 from utils.stock_day import get_all_stock_codes, stock_latest_day, delete_stock_data
 from utils.constants import STOCK_TICK_DATA, STOCK_DAILY, STOCK_TICK_HIST_DATA
@@ -160,3 +161,5 @@ if __name__ == "__main__":
     refresh_stock_tick()
     delete_stock_data()
     convert_tick_to_daily()
+    delete_stock_more_data()
+    insert_more_ma_stock_daily()
