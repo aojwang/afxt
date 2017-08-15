@@ -113,8 +113,8 @@ def refresh_stock_index():
 
 
 def refresh_all_stock():
-    refresh_stock_concept()
-    refresh_stock_list()
+    #refresh_stock_concept()
+    #refresh_stock_list()
     p = Pool(processes=16)
     code_list = get_all_stock_codes()
     p.map(refresh_stock_daily, sorted(code_list))

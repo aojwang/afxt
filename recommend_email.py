@@ -2,7 +2,7 @@
 
 # Copyright (c) 2016 Grant AO. All rights reserved.
 from da.dbutil import SqlRunner
-from utils.email import SendEmail
+from utils.email_ import SendEmail
 
 
 def execute_stmt(stmt):

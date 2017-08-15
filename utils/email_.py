@@ -3,7 +3,9 @@
 # Copyright (c) 2016 Grant AO. All rights reserved.
 import functools
 import datetime
-import django.core.mail
+import smtplib
+from email.mime.text import MIMEText
+
 
 
 CONT_INCREASE_HEADER = u'''
@@ -37,8 +39,13 @@ def send_mail(subject, message, from_email, recipient_list,
               fail_silently=False, auth_user=None, auth_password=None,
               connection=None):
     try:
-        django.core.mail.send_mail(subject, message, from_email, recipient_list, fail_silently,
-                  auth_user, auth_password, connection)
+        msg = MIMEText(message, 'plain', 'utf-8')
+        msg['Subject'] = subject
+        msg['From'] = from_email
+        msg['To'] = 'stock_trend@yeah.net'
+        s = smtplib.SMTP('localhost')
+        s.sendmail(from_email, recipient_list, msg.as_string())
+        s.quit()
     except Exception, e:
         raise e
 
