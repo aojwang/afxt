@@ -18,7 +18,7 @@ def send_up_trend_email():
         WHERE update_time = now()::DATE AND reason = 'up_trend'
     '''
     result = execute_stmt(stmt)
-    print 'up_trend'
+    print 'up_trend', len(result)
     return result
 
 
@@ -30,7 +30,7 @@ def send_callback_email():
         WHERE update_time = now()::DATE AND reason = 'callback'
     '''
     result = execute_stmt(stmt)
-    print 'callback'
+    print 'callback', len(result)
     return result
 
 
@@ -43,8 +43,7 @@ def send_cont_increase_email():
         ORDER BY n_days DESC, p_change[array_upper(p_change, 1)] DESC
     '''
     result = execute_stmt(stmt)
-    print result
-    print 'cont_increase'
+    print 'cont increase', len(result)
     return result
 
 @SendEmail('up_all_mas')
@@ -60,7 +59,7 @@ def send_upallmas_email():
      ORDER BY n_days DESC, interval ASC, p_change DESC
     '''
     result = execute_stmt(stmt)
-    print 'up_all_mas'
+    print 'up_all_mas', len(result)
     return result
 
 

@@ -7,7 +7,7 @@ from da.dbutil import create_table, SqlRunner
 from utils import constants
 from utils.constants import STOCK_DAILY_MORE_MA, STOCK_DAILY, STOCK_DAYS
 from utils.decorator import est_perf
-from utils.stock_day import stock_latest_day
+from utils.stock_day import stock_latest_day, stock_open_day
 
 
 @est_perf
@@ -196,7 +196,7 @@ def insert_more_ma_stock_daily():
           avg(close) OVER ma120_win as ma120,
           avg(close) OVER ma250_win as ma250
         FROM {stock_daily}
-        WHERE date >= %(more_latest)s - 100
+        WHERE date >= %(latest_date)s - 100
         WINDOW ma30_win AS (partition by code ORDER BY date
         ROWS 29 PRECEDING),
         ma60_win AS (partition by code ORDER BY date
@@ -209,7 +209,10 @@ def insert_more_ma_stock_daily():
         WHERE date > %(more_latest)s
     """.format(name=STOCK_DAILY_MORE_MA, stock_daily=STOCK_DAILY)
     runner = SqlRunner()
-    runner.execute(sql, {'more_latest': stock_daily_more_latest})
+    runner.execute(sql, {
+        'more_latest': stock_daily_more_latest,
+        'latest_date': stock_open_day(runner, stock_daily_latest, 260),
+    })
     runner.dispose()
 
 
@@ -228,3 +231,4 @@ def refresh_stock_days():
 if __name__ == "__main__":
     refresh_more_ma_stock_daily()
     insert_more_ma_stock_daily()
+

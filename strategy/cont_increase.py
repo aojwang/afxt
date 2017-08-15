@@ -33,7 +33,7 @@ class ContinuousIncrease(object):
           DELETE FROM continuous_increase WHERE update_date = NOW()::DATE AND n_days = %(n_days)s;
           INSERT INTO continuous_increase (industry, code, name, p_change, n_days)
           SELECT t.industry, s.code, t.name,
-            array_agg(s.p_change order by s.date), %(n_days)s
+            array_agg(round(s.p_change::numeric, 2) order by s.date), %(n_days)s
             FROM stock_daily s, stock_info t, stock_daily sd
             WHERE s.code = t.code AND
                   s.p_change between -3.0 and 5.0 AND
@@ -95,8 +95,8 @@ class UpAllMAs(object):
             stock_daily_more t
             where s.code = t.code and t.date = %(latest_date)s and s.code = i.code and
                   t.p_change between 0.1 and 5 and t.close > t.ma5 and t.close > t.ma10 and
-                  t.close > t.ma20 and t.close > t.ma30 and t.close > t.ma60 and
-                  t.close > t.ma120 and t.close > t.ma250;
+                  t.close > t.ma20 and t.close > t.ma30 and t.close > t.ma60 
+                  and t.close > t.ma120 and t.close > t.ma250;
         '''
         latest_date = stock_day.stock_latest_day(self.runner)
         params = {
@@ -114,8 +114,8 @@ if __name__ == '__main__':
     # ci.create_table()
     ci.get_top_n(2)
     ci.get_top_n(3)
-    ci.get_top_n(4)
-    ci.get_top_n(5)
+    #ci.get_top_n(4)
+    #ci.get_top_n(5)
     ums = UpAllMAs()
     #ums.create_table()
     ums.get_top_n(2, 1)
